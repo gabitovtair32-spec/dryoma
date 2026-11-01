@@ -1198,7 +1198,7 @@ function ib(key){ return `<button type="button" class="ib" data-info="${key}" ar
 const INFO = {
   beta:{t:'Бета-версия', m:'happy', say:'Спасибо, что тестируете меня! Мур!', b:`
     <p>Сейчас ${APP} в бета-версии: <b>все функции бесплатны</b>, включая звуки, микс, курс, разбор недели и гардероб.</p>
-    <p>Если что-то работает не так или хочется новую функцию — напишите разработчику: <b>@dryoma_support</b>. Каждое сообщение читаем.</p>`},
+    <p>Если что-то работает не так или хочется новую функцию — напишите разработчику: <b>@chydachyooo</b>. Каждое сообщение читаем.</p>`},
   about:{t:'Как работает '+APP, m:'bright', say:'Расскажу честно, без магии.', b:`
     <p><b>Мы не измеряем сон датчиками.</b> Ваш главный инструмент — дневник сна. Его используют сомнологи по всему миру: время отбоя и подъёма, сколько засыпали, просыпались ли и как себя чувствуете. Этого хватает, чтобы увидеть закономерности.</p>
     <p><b>Из дневника я считаю</b> длительность сна, индекс сна и связи с вашими привычками: кофе, телефон, спорт, стресс.</p>
@@ -2443,6 +2443,10 @@ lastPhase = applyPhase();
 setInterval(()=>{ const today = iso(tzNow()); if (today !== TODAY){ TODAY = today; } const ph = applyPhase(); if (ph !== lastPhase || today !== lastDay){ lastPhase = ph; lastDay = today; if (!document.querySelector('#layer .scrim, #layer .breath') && current==='sleep') renderSleep(); } }, 30000);
 refreshBadge(); go('sleep');
 if (!S.onboarded) openOnb();
+/* deep links from the bot: ?open=calm | diary | stats | learn | chat | winddown */
+(function(){ let o = ''; try { o = new URLSearchParams(location.search).get('open') || ''; } catch(e){}
+  if (!o || !S.onboarded) return;
+  if (o==='calm') openCalm(); else if (o==='winddown') openWinddown(); else if (['sleep','diary','stats','learn','chat'].includes(o)) go(o); })();
 /* restore from Telegram cloud when this device has no local data yet (new phone, reinstall) */
 (function(){ let hasLocal = false; try { hasLocal = !!localStorage.getItem(KEY); } catch(e){}
   if (!hasLocal || !S.entries.length) cloudLoad(data=>{ if (!data || !data.entries || !data.entries.length) return;
